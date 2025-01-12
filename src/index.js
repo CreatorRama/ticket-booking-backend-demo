@@ -1,11 +1,12 @@
 const express=require('express')
 const app=express()
-const {PORT}=require('./config')
+const {serverconfig,logger}=require('./config')
 const apiRoutes=require('./routes')
 // console.log(PORT);
 // console.log(Aboutcontroller);
 
 app.use('/api',apiRoutes)
-app.listen(PORT,()=>{
-    console.log(`successfully started the server on port ${PORT}`);
+app.listen(serverconfig.PORT,()=>{
+    console.log(`successfully started the server on port ${serverconfig.PORT}`);
+    // logger.info('successfully started the server')
 })

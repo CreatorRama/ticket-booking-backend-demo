@@ -24,6 +24,10 @@ repositories for data from the database
 ## Setup the project
 
 -Download this template from github and open it in your favourate text editor.
+-Go inside the folder path and execute the following command.
+```
+npm install
+```
 -In the root directory create a `.env` file and add the following env variables
 ```
 PORT=<Port number of your choice>
@@ -33,6 +37,11 @@ ex:
 ```
 PORT=3000
 ```
+-go inside the `src` folder and execute the following command:
+```
+npx sequelize init
+```
+-By executing the above commandyou will get migrations and seeders folder  with a config.json in config folder in your src folder.
 -Inside  the `src/config` folder create a file named as `config.json` and write the following code:
 ```
 {
@@ -60,4 +69,10 @@ PORT=3000
 }
 ```
 
--If you are setting up your developmant environment,then write the username of your
+-If you are setting up your developmant environment,then write the username of your db,password of your db and in dialect mention whatever db you are using for ex: mysql,mariadb etc.
+-if you're seeting up the test and prod make sure that you also replace the host with hosted db url.
+
+-To run the server execute the follwing command
+```
+npm start
+```

@@ -8,5 +8,7 @@ router.post('/',
     Airplanecontroller.createAirplane)
 router.get('/',
     Airplanecontroller.getAirplanes)
+router.get('/:id',
+    Airplanecontroller.getAirplane)
 
 module.exports=router

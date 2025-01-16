@@ -1,4 +1,6 @@
 const { Where } = require('sequelize/lib/utils');
+const AppError = require('../Utils/errors/app-error');
+const { StatusCodes } = require('http-status-codes');
 // const {logger}=require('../config')
 
 class crudrepository{
@@ -22,7 +24,10 @@ class crudrepository{
     }
     async get(data){
         
-            const response=await this.model.findByPK(data);
+            const response=await this.model.findByPk(data);
+            if(!response){
+                throw new AppError("Id is not Valid for Data",StatusCodes.NOT_FOUND)
+            }
             return response;
        
     }

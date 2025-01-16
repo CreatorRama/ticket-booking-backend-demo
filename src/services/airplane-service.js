@@ -29,12 +29,32 @@ try {
 }
 
 }
-async function getAirplanes(data){
+async function getAirplanes(){
 try {
     console.log("inside airplane service");
-    const airplanes=await airplaneRepository.getAll(data);
+    const airplanes=await airplaneRepository.getAll();
     return airplanes;
 } catch (error) {
+    console.log('inside services catch block',error);
+        throw new AppError(
+            'Cannot get Data of all the aeroplanes',
+            StatusCodes.BAD_REQUEST
+        );
+
+}
+
+}
+async function getAirplane(id){
+try {
+    console.log("inside airplane service");
+    const airplanes=await airplaneRepository.get(id);
+    return airplanes;
+} catch (error) {
+    // if(error instanceof AppError) throw error;
+    //or
+    if(error.statusCode==StatusCodes.NOT_FOUND){
+        throw new AppError("The aeroplane you were requesting is not found",StatusCodes.NOT_FOUND)
+    }
     console.log('inside services catch block',error);
         throw new AppError(
             'Cannot get Data of all the aeroplanes',
@@ -47,5 +67,6 @@ try {
 
 module.exports={
 createAirplane,
-getAirplanes
+getAirplanes,
+getAirplane
 }

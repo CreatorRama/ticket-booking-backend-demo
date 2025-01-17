@@ -1,4 +1,4 @@
-const { Where } = require('sequelize/lib/utils');
+const { where } = require('sequelize/lib/utils');
 const AppError = require('../Utils/errors/app-error');
 const { StatusCodes } = require('http-status-codes');
 // const {logger}=require('../config')
@@ -12,13 +12,16 @@ class crudrepository{
         const response=await this.model.create(data);
         return response;
     }
-    async destroy(data){
+    async destroy(id){
         
             const response=await this.model.destroy({
-                Where:{
-                    id:data
+                where:{
+                    id:id
                 }
             });
+            if(!response){
+                throw new AppError("Id is not Valid for Data to remove",StatusCodes.NOT_FOUND)
+            }
             return response;
        
     }
@@ -40,7 +43,7 @@ class crudrepository{
     async update(id,data){  //data->{col:value...}
         
             const response=await this.model.update(data,{
-                Where:{
+                where:{
                     id:id
                 }
             })

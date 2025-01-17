@@ -64,9 +64,30 @@ try {
 }
 
 }
+async function removeAirplane(id){
+try {
+    console.log("inside airplane service");
+    const airplanes=await airplaneRepository.destroy(id);
+    return airplanes;
+} catch (error) {
+    // if(error instanceof AppError) throw error;
+    //or
+    if(error.statusCode==StatusCodes.NOT_FOUND){
+        throw new AppError("The aeroplane you were requesting to delete is not found",StatusCodes.NOT_FOUND)
+    }
+    console.log('inside services catch block',error);
+        throw new AppError(
+            'Cannot get Data of all the aeroplanes',
+            StatusCodes.BAD_REQUEST
+        );
+
+}
+
+}
 
 module.exports={
 createAirplane,
 getAirplanes,
-getAirplane
+getAirplane,
+removeAirplane
 }

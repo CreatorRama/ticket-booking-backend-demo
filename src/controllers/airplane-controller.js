@@ -44,5 +44,18 @@ try {
     return res.status(error.statusCode).json(errorresponse)
 }
 }
+async function destroyAirplane(req,res){
+try {
+    console.log(req.body);
+    console.log("inside airplane-controller");
+    const airplanes=await AirplaneService.removeAirplane(req.params.id)
+    successresponse.data=airplanes
+    return res.status(StatusCodes.OK).json(successresponse)
+} catch (error) {
+    console.log('inside controller catch block',error);
+    errorresponse.error=error
+    return res.status(error.statusCode).json(errorresponse)
+}
+}
 
-module.exports={createAirplane,getAirplanes,getAirplane}
+module.exports={createAirplane,getAirplanes,getAirplane,destroyAirplane}

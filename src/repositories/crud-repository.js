@@ -25,29 +25,31 @@ class crudrepository{
             return response;
        
     }
-    async get(data){
+    async get(id){
         
-            const response=await this.model.findByPk(data);
+            const response=await this.model.findByPk(id);
             if(!response){
-                throw new AppError("Id is not Valid for Data",StatusCodes.NOT_FOUND)
+                throw new AppError("The aeroplane you were requesting to get is not found",StatusCodes.NOT_FOUND)
             }
             return response;
        
     }
-    async getAll(data){
+    async getAll(){
        
             const response=await this.model.findAll()
             return response;
        
     }
     async update(id,data){  //data->{col:value...}
-        
+        console.log(data);
             const response=await this.model.update(data,{
                 where:{
                     id:id
                 }
             })
-            return response;
+             if(!response[0]) {
+                throw new AppError("The aeroplane you were requesting to update is not found",StatusCodes.NOT_FOUND)
+             }
     }
 }
 

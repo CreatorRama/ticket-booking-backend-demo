@@ -12,7 +12,7 @@ try {
     return city;
 } catch (error) {
     console.log('inside services catch block',error);
-    if (error.name === 'SequelizeValidationError') {
+    if (error.name === 'SequelizeUniqueConstraintError') {
         let explanation=[]
         error.errors.forEach((err)=>{
             explanation.push(err.message)
@@ -20,7 +20,7 @@ try {
         console.log(explanation);
         throw new AppError(
             explanation,
-            StatusCodes.BAD_REQUEST
+            StatusCodes.CONFLICT
         );
     }
     throw new AppError(

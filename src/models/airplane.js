@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
     //for js level constraints for foreign key,etc
     static associate(models) {
       // define association here
+      this.hasMany(models.Flight,{
+       foreignKey:'AirplaneId',
+       onDelete:'CASCADE'
+      })
     }
   }
   Airplane.init({

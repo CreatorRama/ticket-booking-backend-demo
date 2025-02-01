@@ -23,3 +23,5 @@ app.listen(serverconfig.PORT,async ()=>{
     // console.log(lal);
 
 })
+//to generate migration file 
+//npx sequelize migration:generate --name update-city-airport-association

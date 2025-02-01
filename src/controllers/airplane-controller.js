@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes')
-const AirplaneService=require('../services');
+const {AirplaneService}=require('../services');
 // const { error } = require('winston');
 const {errorresponse,successresponse}=require('../Utils/common')
 async function createAirplane(req,res){
@@ -48,7 +48,7 @@ async function destroyAirplane(req,res){
 try {
     console.log(req.body);
     console.log("inside airplane-controller");
-    const airplanes=await AirplaneService.updateAirplane(req.params.id)
+    const airplanes=await AirplaneService.removeAirplane(req.params.id)
     successresponse.data=airplanes
     return res.status(StatusCodes.OK).json(successresponse)
 } catch (error) {

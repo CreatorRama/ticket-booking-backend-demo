@@ -3,11 +3,13 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-   await queryInterface.addConstraint('Airports','city_id',{
+   await queryInterface.addConstraint('Airports',{
     type:'foreign key',
+    name:'city_fkey_constraint',
+    fields:['city_id'],
     references:{
-      model:'Cities',
-      key:'id'
+      table:'Cities',
+      field:'id'
     },
     onUpdate:'CASCADE',
     OnDELETE:'CASCADE'
@@ -15,11 +17,8 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
+      // await queryInterface.dropTable('users');
+      await queryInterface.removeConstraint('Airports', 'city_fkey_constraint');
+     
   }
 };

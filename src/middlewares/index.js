@@ -1,5 +1,6 @@
 module.exports={
     airplanemiddlewarevalidator:require('./airplane-middleware'),
     citymiddlewarevalidator:require('./city-middleware'),
-    Airportmiddlewarevalidator:require('./airport-middleware')
+    Airportmiddlewarevalidator:require('./airport-middleware'),
+    flightmiddlewarevalidator:require('./flight-middleware')
 }

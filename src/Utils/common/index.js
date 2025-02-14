@@ -4,5 +4,6 @@ const errorresponse = require('./error-response');
 
 module.exports={
     successresponse,
-    errorresponse
+    errorresponse,
+    Enums:require('./enums')
 }

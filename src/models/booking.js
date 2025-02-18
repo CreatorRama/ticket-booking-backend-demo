@@ -2,6 +2,8 @@
 const {
   Model
 } = require('sequelize');
+const {Enums}=require('../Utils/common')
+const{BOOKED,INITIATED,PENDING,CANCELED}=Enums.BOOKING_STATUS
 module.exports = (sequelize, DataTypes) => {
   class Booking extends Model {
     /**
@@ -24,12 +26,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     status: {
       type: DataTypes.ENUM,
-      allowNull: false,
+      values:[BOOKED,INITIATED,PENDING,CANCELED],
+      defaultValue:INITIATED,
+      allowNull:false
     },
     noOfSeats:{
       type: DataTypes.INTEGER,
-      values:[],
       allowNull: false,
+      defaultValue:1
     },
     totalCost: {
       type: DataTypes.INTEGER,

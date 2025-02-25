@@ -89,5 +89,20 @@ async function getAllFlights(req,res){
     return res.status(error.statusCode).json(errorresponse)
     }
 }
+async function updateSeats(req,res){
+    try {
+    const flights=await FlightService.updateSeats({
+        flightId:req.params.id,
+        seats:req.body.seats,
+        dec:req.body.dec
+    })
+        successresponse.data=flights
+        return res.status(StatusCodes.OK).json(successresponse)
+    } catch (error) {
+        console.log('inside controller catch block',error);
+    errorresponse.error=error
+    return res.status(error.statusCode).json(errorresponse)
+    }
+}
 
-module.exports={createFlight,getFlights,getFlight,destroyFlight,updateFlight,getAllFlights}
+module.exports={createFlight,getFlights,getFlight,destroyFlight,updateFlight,getAllFlights,updateSeats}

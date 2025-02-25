@@ -16,5 +16,8 @@ router.delete('/:id',
     Flightcontroller.destroyFlight)
 router.patch('/:id',
     Flightcontroller.updateFlight)
+router.patch('/:id/seats',
+    flightmiddlewarevalidator.validateUpdateSeatsRequest,
+    Flightcontroller.updateSeats)
 
 module.exports=router

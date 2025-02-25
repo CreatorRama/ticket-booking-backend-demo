@@ -42,5 +42,25 @@ function validatecreaterequest(req, res, next) {
     
     next();
 }
+function validateUpdateSeatsRequest(req, res, next) {
+    const requiredFields = [
+        'seats'
+    ];
 
-module.exports = { validatecreaterequest };
+    // Check for missing fields
+    const missingFields = requiredFields.filter((field) => !req.body[field]);
+    console.log("inside flight-middleware ");
+    if (missingFields.length > 0) {
+        errorresponse.messsage = 'Something went wrong while updating flights';
+        errorresponse.error = new AppError(
+            [`Missing required fields or incorrect required fields: ${missingFields.join(', ')}`],
+            StatusCodes.BAD_REQUEST
+        );
+        return res.status(StatusCodes.BAD_REQUEST).json(errorresponse);
+    }
+
+    
+    next();
+}
+
+module.exports = { validatecreaterequest,validateUpdateSeatsRequest };

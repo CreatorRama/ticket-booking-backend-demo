@@ -60,7 +60,7 @@ try {
     console.log('inside services catch block',error);
         throw new AppError(
             'Cannot get Data of all the flights',
-            StatusCodes.BAD_REQUEST
+            StatusCodes.INTERNAL_SERVER_ERROR
         );
 
 }
@@ -117,6 +117,19 @@ try {
 
 }
 
+async function updateSeats(data){
+try {
+    const response=flightRepository.updateRemainingSeats(data.flightId,data.seats,data.dec)
+return response
+} catch (error) {
+    console.log(error);
+    throw new AppError(
+        'Cannot update Data of all the flight',
+        StatusCodes.INTERNAL_SERVER_ERROR
+    );
+}
+}
+
 async function getAllFlights(query){
     // console.log(query,"\n")
 let customfilters={}
@@ -168,5 +181,6 @@ getFlight,
 getFlights,
 removeFlight,
 updateFlight,
-getAllFlights
+getAllFlights,
+updateSeats
 }

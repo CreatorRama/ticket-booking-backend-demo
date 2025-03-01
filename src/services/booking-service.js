@@ -1,33 +1,40 @@
 const { StatusCodes } = require('http-status-codes');
 const {BookingRepository}=require('../repositories');
 const  AppError = require('../Utils/errors/app-error');
-
+const axios=require('axios')
 const bookingRepository=new BookingRepository()
 
-async function createBooking(data){
-try {
-    console.log("inside Booking service");
-    const response=await bookingRepository.create(data);
-    return response;
-} catch (error) {
-    console.log('inside services catch block',error);
-    if (error.name === 'SequelizeValidationError') {
-        let explanation=[]
-        error.errors.forEach((err)=>{
-            explanation.push(err.message)
-        })
-        console.log(explanation);
-        throw new AppError(
-            explanation,
-            StatusCodes.BAD_REQUEST
-        );
-    }
-    throw new AppError(
-        'Database error occurred while creating an Booking object: ' + error.message,
-        StatusCodes.INTERNAL_SERVER_ERROR
-    );
-}
+const db=require('../models')
 
+const {serverconfig}=require('../config')
+
+
+async function createBooking(data){
+    const transaction =await db.sequelize.transaction()
+    try {
+            const flight=await axios.get(`${serverconfig.FLIGHT_SERVICE}/api/v1/flights/${data.flightId}`)
+            // console.log(flight);
+            const Flight=flight.data.data
+            
+            if(data.noOfSeats>Flight.totalseats){
+                console.log("ram");
+                throw new AppError(
+                    "The demanded seats are greater than totalseats",
+                    StatusCodes.BAD_REQUEST)
+                }
+                const totalbookingprice=Flight.price*data.noOfSeats
+                const bookingpayload={...data,totalCost:totalbookingprice}
+                const booking=await bookingRepository.createBooking(bookingpayload,transaction)
+
+            await axios.patch(`${serverconfig.FLIGHT_SERVICE}/api/v1/flights/${data.flightId}/seats`,{seats:data.noOfSeats})
+
+    await transaction.commit()
+    return booking 
+}  
+    catch (error) {
+        transaction.rollback();
+        throw error
+    }
 }
 async function getBookings(){
 try {

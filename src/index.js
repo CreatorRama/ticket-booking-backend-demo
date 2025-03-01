@@ -2,6 +2,9 @@ const express=require('express')
 const app=express()
 const {serverconfig,logger}=require('./config')
 const apiRoutes=require('./routes')
+
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
 // console.log(PORT);
 // console.log(Aboutcontroller);
 

@@ -4,11 +4,12 @@ const {BookingService}=require('../services');
 const {errorresponse,successresponse}=require('../Utils/common')
 async function createBooking(req,res){
 try {
-    console.log(req.body);
+    console.log(req.body.noOfSeats);
     console.log("inside Booking-controller");
     const Booking=await BookingService.createBooking({
-        modelNumber:req.body.modelNumber,
-        capacity:req.body.capacity
+        flightId:req.body.flightId,
+        userId:req.body.userId,
+        noOfSeats:req.body.noOfSeats
     })
     successresponse.data=Booking
     return res.status(StatusCodes.CREATED).json(successresponse)

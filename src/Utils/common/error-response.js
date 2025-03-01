@@ -1,8 +1,7 @@
 const errorresponse={
     success:false,
     messsage:"Something went wrong",
-    error:{},
-    data:{}
+    error:{}
 }
 
 

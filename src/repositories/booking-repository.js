@@ -5,8 +5,9 @@ class BookingRepository extends CrudRepository{
         super(Booking)
     }
 
-    async somerawquery(){
-
+    async createBooking(data,transaction){
+        const response=Booking.create(data,{transaction:transaction})
+        return response
     }
 }
 

@@ -12,11 +12,30 @@ try {
         noOfSeats:req.body.noOfSeats
     })
     successresponse.data=Booking
-    return res.status(StatusCodes.CREATED).json(successresponse)
+    return res.status(StatusCodes.OK).json(successresponse)
 } catch (error) {
     console.log('inside controller catch block',error);
     errorresponse.error=error
-    return res.status(error.statusCode).json(errorresponse)
+    const statusCode = error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR;
+    return res.status(statusCode).json(errorresponse)
+}
+}
+async function makePayment(req,res){
+try {
+    console.log(req.body.noOfSeats);
+    console.log("inside Booking-controller");
+    const Booking=await BookingService.makePayment({
+        totalCost:req.body.totalCost,
+        userId:req.body.userId,
+        bookingId:req.body.bookingId
+    })
+    successresponse.data=Booking
+    return res.status(StatusCodes.OK).json(successresponse)
+} catch (error) {
+    console.log('inside controller catch block',error);
+    errorresponse.error=error
+    const statusCode = error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR;
+    return res.status(statusCode).json(errorresponse)
 }
 }
 async function getBookings(req,res){
@@ -73,4 +92,4 @@ try {
 }
 }
 
-module.exports={createBooking,getBookings,getBooking,destroyBooking,updateBooking}
+module.exports={createBooking,getBookings,getBooking,destroyBooking,updateBooking,makePayment}

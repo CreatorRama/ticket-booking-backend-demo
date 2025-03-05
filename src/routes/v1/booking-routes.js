@@ -6,6 +6,7 @@ const router=express.Router()
 
 router.get('/',BookingController.getBookings)
 router.post('/',BookingController.createBooking)
+router.post('/payments',BookingController.makePayment)
 router.get('/booking/:id',BookingController.getBooking)
 router.patch('/booking',BookingController.updateBooking)
 router.delete('/booking',BookingController.destroyBooking)

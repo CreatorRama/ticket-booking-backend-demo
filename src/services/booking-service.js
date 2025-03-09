@@ -54,7 +54,7 @@ try {
     const bookingtime=new Date(Bookings.createdAt)
     const currenttime=new Date();
     if(currenttime-bookingtime>5*60*1000){
-        await bookingRepository.update(data.bookingId,{status:CANCELED},transaction)
+        await cancelBooking(data.bookingId)
         throw new AppError("The booking has expired",StatusCodes.BAD_REQUEST)
     }
     if(Bookings.totalCost!=data.totalCost){
@@ -71,10 +71,48 @@ try {
     console.log('inside services catch block',error);
         // if(error instanceof AppError) throw error
         await transaction.rollback();
+        // console.log(error);
         throw error
         // throw new AppError("something went wrong while making payment", StatusCodes.INTERNAL_SERVER_ERROR)
+    }
+    
+}
+async function cancelBooking(bookingId){
+    const transaction=await db.sequelize.transaction()
+try {
+    console.log("inside Booking service");
+    const Booking=await bookingRepository.get(bookingId,transaction);
+
+    // console.log(Booking);
+
+    if(Booking.status==CANCELED){
+        await transaction.commit();
+        return true
+    }
+
+    await axios.patch(`${serverconfig.FLIGHT_SERVICE}/api/v1/flights/${Booking.flightId}/seats`,{seats:Booking.noOfSeats,dec:0})
+    await bookingRepository.update(bookingId,{status:CANCELED},transaction)
+    await transaction.commit();
+} catch (error) {
+    await transaction.rollback()
+    // console.log(error);
+    throw error
+
+}
 }
 
+async function canceloldbookings() {
+    try {
+        console.log("inside service");
+        const currenttime=new Date(Date.now()-1000*300);   //time every 5 mins gap
+        const response=await bookingRepository.canceloldbookings(currenttime)
+        return response
+    } catch (error) {
+        
+    }
+
+
+    
 }
 async function getBookings(){
 try {
@@ -110,25 +148,6 @@ try {
 
 }
 
-}
-async function removeBooking(id){
-try {
-    console.log("inside Booking service");
-    const Booking=await bookingRepository.destroy(id);
-    return Booking;
-} catch (error) {
-    // if(error instanceof AppError) throw error;
-    //or
-    if(error.statusCode==StatusCodes.NOT_FOUND){
-        throw new AppError("The Booking you were requesting to delete is not found",StatusCodes.NOT_FOUND)
-    }
-    console.log('inside services catch block',error);
-        throw new AppError(
-            'Cannot get Data of all the Booking',
-            StatusCodes.BAD_REQUEST
-        );
-
-}
 }
 async function updateBooking(id,data){
 try {
@@ -166,7 +185,8 @@ module.exports={
 createBooking,
 getBookings,
 getBooking,
-removeBooking,
+cancelBooking,
 updateBooking,
-makePayment
+makePayment,
+canceloldbookings
 }
